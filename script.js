@@ -7,14 +7,32 @@ const p0Score = document.getElementById('score--0');
 const p1Score = document.getElementById('score--1');
 const p0CurrentScore = document.getElementById('current--0');
 const p1CurrentScore = document.getElementById('current--1');
-let currentScore = 0;
-let activePlayer = 0;
-let scores = [0, 0];
-let playing = true;
+
+// Selecting button elements
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 const btnNew = document.querySelector('.btn--new');
 const currentDice = document.querySelector('.dice');
+
+let currentScore, activePlayer, scores, playing;
+
+const init = function () {
+  activePlayer = 0;
+  currentScore = 0;
+  scores = [0, 0];
+  playing = true;
+  player1.classList.remove('player--active');
+  player0.classList.add('player--active');
+  p0Score.textContent = scores[0];
+  p1Score.textContent = scores[1];
+  p0CurrentScore.textContent = 0;
+  p1CurrentScore.textContent = 0;
+  currentDice.classList.add('hidden');
+  document
+    .querySelector(`.player--${activePlayer}`)
+    .classList.remove('player--winner');
+};
+init();
 
 const switchPlayer = function () {
   document.getElementById(`current--${activePlayer}`).textContent = 0;
@@ -25,11 +43,7 @@ const switchPlayer = function () {
 };
 
 // When the page is loaded reset the score to 0 and hide the dice img
-window.addEventListener('load', function (e) {
-  p0Score.textContent = 0;
-  p1Score.textContent = 0;
-  currentDice.classList.add('hidden');
-});
+window.addEventListener('load', init());
 
 // Rolling dice
 
@@ -69,7 +83,7 @@ btnHold.addEventListener('click', function () {
     document.getElementById(`score--${activePlayer}`).textContent =
       scores[activePlayer];
     // Check if score >= 100
-    if (scores[activePlayer] >= 20) {
+    if (scores[activePlayer] >= 100) {
       //Finish the game
       playing = false;
       document
@@ -86,17 +100,4 @@ btnHold.addEventListener('click', function () {
   }
 });
 
-btnNew.addEventListener('click', function () {
-  document
-    .querySelector(`.player--${activePlayer}`)
-    .classList.remove('player--winner');
-  activePlayer = 0;
-  currentScore = 0;
-  scores = [0, 0];
-  document.querySelector(`.player--1`).classList.remove('player--active');
-  document.querySelector(`.player--0`).classList.add('player--active');
-  document.getElementById(`score--0`).textContent = scores[0];
-  document.getElementById(`score--0`).textContent = scores[1];
-  document.getElementById(`current--0`).textContent = 0;
-  document.getElementById(`current--1`).textContent = 0;
-});
+btnNew.addEventListener('click', init);
